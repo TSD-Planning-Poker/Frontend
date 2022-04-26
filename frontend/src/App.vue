@@ -22,5 +22,12 @@ export default {
   data: () => ({
     //
   }),
+methods: {
+  
+},
+  created() {
+    // this.setUserInfo();
+    this.$root.$refs.App = this;
+  },
 };
 </script>
