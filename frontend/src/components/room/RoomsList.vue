@@ -16,6 +16,7 @@
 // import axios from 'axios'
 // import { CSRF_TOKEN } from "../common/csrf_token"
 import RoomTile from './RoomTile.vue'
+import axios from '../common/axios_s.js'
 
 export default {
   name: "RoomsList",
@@ -47,17 +48,19 @@ export default {
       //   this.roomsList = data
       // });
 
-      // let config = {
-      //  headers: {
-        //  'Access-Control-Allow-Origin': '*',
-        // 'X-CSRFTOKEN': CSRF_TOKEN
-        // }
+    //   let config = {
+    //    headers: {
+    //      'Access-Control-Allow-Origin': '*',
+    //     'X-CSRFTOKEN': CSRF_TOKEN
+    //     }
     // }
 
     // return axios.get(`http://127.0.0.1:8000/api/rooms/`, config)
     // .then(console.log("success"))
     // .catch(error => console.log(error));
-    
+    var rooms = await axios.get("http://127.0.0.1:8000/api/rooms/");
+    console.log("=============")
+    console.log(rooms)
 
     },
   },
