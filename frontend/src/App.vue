@@ -1,33 +1,32 @@
 <template>
-  <v-app>
-    <NavbarComponent/>
-    <v-main>
-      <RoomsList/>
-    </v-main>
-  </v-app>
+  <div id="app">
+    <v-app>
+    <navbar-component/>
+    <router-view class="wrapper"/>
+    </v-app>
+  </div>
 </template>
 
 <script>
-import RoomsList from './components/room/RoomsList';
-import NavbarComponent from './components/navbar_footer/NavbarComponent';
-
+import NavbarComponent from '@/components/navbar_footer/NavbarComponent'
 export default {
-  name: 'App',
-
-  components: {
-    RoomsList,
+  components:{
     NavbarComponent
-  },
-
-  data: () => ({
-    //
-  }),
-methods: {
-  
-},
-  created() {
-    // this.setUserInfo();
-    this.$root.$refs.App = this;
-  },
-};
+  }
+}
 </script>
+
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  // color: #2c3e50;
+}
+
+
+.wrapper{
+  margin-top: 100px;
+}
+</style>

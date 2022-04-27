@@ -42,6 +42,8 @@ export default {
 <style>
 .roomsWrapper {
   display: flex;
-  margin: 50px 100px;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* margin: 0  50px; */
 }
 </style>

@@ -5,8 +5,8 @@
       dark
     >
       <div class="d-flex align-center">
-
-        Planning Poker
+<router-link to="/" color="secondary">Planning Poker</router-link> 
+        
       </div>
 
       <v-spacer></v-spacer>
@@ -30,3 +30,11 @@ export default({
 
 })
 </script>
+
+
+<style lang="scss">
+  a{
+    text-decoration:unset;
+    color: #fff !important;
+  }
+</style>
