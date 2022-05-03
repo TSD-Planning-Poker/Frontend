@@ -3,7 +3,7 @@
   <div class="">
     <div class="flex justify-between">
       <div>
-        <h4 class="text-sm text-left font-bold text-indigo-600">Hi "User name",</h4>
+        <h4 class="text-sm text-left font-bold text-indigo-600">Hi {{username}},</h4>
         <h1 class="text-4xl font-bold text-indigo-900 mt-">Welcome to Plannning poker</h1>
       </div>
       <div>
@@ -129,7 +129,16 @@
 
 <script>
 export default {
-
+  data(){
+    return{
+      username: "",
+    }
+  },
+mounted() {
+    if (localStorage.username) {
+      this.username = localStorage.username;
+    }
+  },
 }
 </script>
 
