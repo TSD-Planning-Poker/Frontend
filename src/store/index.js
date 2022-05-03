@@ -1,6 +1,6 @@
 
 import { createStore } from 'vuex'
-
+import rooms from './rooms'
 
 // Create a new store instance.
 const store = createStore({
@@ -13,6 +13,9 @@ const store = createStore({
       increment (state) {
         state.count++
       }
+    },
+    modules: {
+        rooms: rooms
     }
   })
 
