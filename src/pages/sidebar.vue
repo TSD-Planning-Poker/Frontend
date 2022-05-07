@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen flex">
-        <div class="py-12 px-10 w-1/5">
+        <div class="py-12 px-10 w-1/6">
             <div class="flex space-2 items-center border-b-2 pb-4">
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 58 58" fill="none">
@@ -105,7 +105,7 @@
                     class="block font-semibold text-gray-500 hover:text-indigo-600 transition duration-200">Logout</a>
             </div>
         </div>
-        <div class="bg-indigo-50 flex-grow py-12 px-10">
+        <div class="bg-indigo-50 flex-grow py-12 px-10 basis-1">
             <router-view></router-view>
         </div>
     </div>
