@@ -1,6 +1,15 @@
+import {
+  fetchRoomsService,
+  fetchStoriesInRoomsService,
+  addStoryInRoomService,
+} from "./room_services";
+import { startSessionService } from "./stories_services";
+import { fetchCurrentMarks } from "./marks_services";
 
-
-import { fetchRoomsService } from "./room_services";
-
-
-export { fetchRoomsService }
+export {
+  fetchRoomsService,
+  fetchStoriesInRoomsService,
+  addStoryInRoomService,
+  startSessionService,
+  fetchCurrentMarks,
+};

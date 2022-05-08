@@ -13,7 +13,7 @@
   </div>
 
   <div class="flex flex-wrap">
-    <div v-for="i in rooms" :key='i' class=" flex flex-col w-72 my-3 mx-5 h-36 bg-white rounded-md shadow-md hover:cursor-pointer">
+    <div v-on:click="navigateRoom(i)" v-for="i in rooms" :key='i' class=" flex flex-col w-72 my-3 mx-5 h-36 bg-white rounded-md shadow-md hover:cursor-pointer">
         <div class="top h-7 m-1 text-xs text-right font-bold text-slate-300 pr-2"> Created: 20/04/2022</div>
         <div class="middle flex-grow flex mx-5">
           <div class="flex ml-3 flex-col">
@@ -58,6 +58,11 @@ export default {
     searchRooms(){
       console.log("============searching", this.search)
       this.$store.dispatch('fetchRooms', this.search)
+    },
+
+    navigateRoom(room){
+        console.log(room)
+        this.$router.push({ name: 'rooms-details', params: { id: room.id } })
     }
   },
 
