@@ -1,5 +1,5 @@
 
-import { fetchCurrentMarks } from '../services'
+import { fetchCurrentMarks , UpdateMarkService} from '../services'
 
 const marks_state = {
     state: () => ({ 
@@ -17,6 +17,10 @@ const marks_state = {
         var response = await fetchCurrentMarks(id)
         contex.commit('setCurrentMarks', response.data)
       },
+
+      async updateMark(context, data){
+        var response = await UpdateMarkService(data)
+      }
       
      }
   }

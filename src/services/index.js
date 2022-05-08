@@ -4,7 +4,7 @@ import {
   addStoryInRoomService,
 } from "./room_services";
 import { startSessionService } from "./stories_services";
-import { fetchCurrentMarks } from "./marks_services";
+import { fetchCurrentMarks, UpdateMarkService } from "./marks_services";
 
 export {
   fetchRoomsService,
@@ -12,4 +12,5 @@ export {
   addStoryInRoomService,
   startSessionService,
   fetchCurrentMarks,
+  UpdateMarkService
 };

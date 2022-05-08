@@ -59,7 +59,7 @@
                 <button
                   type="button"
                   class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  @click="addStory()"
+                  @click="updateMark()"
                 >
                   Evaluate
                 </button>
@@ -97,7 +97,7 @@ export default {
     TransitionChild,
     TransitionRoot,
   },
-  props: ["open"],
+  props: ["open", "mark_id"],
   data() {
     return {
       mark: 0,
@@ -108,19 +108,14 @@ export default {
       sendTrigger(){
           this.$emit('onCancel')
       },
-      async addStory(){
-        try {
-            await this.$store.dispatch('AddStory', {
-                    title: this.storyTitle,
-                    description: this.storyDesc,
-                    room: this.roomId
-                })
-            this.storyTitle = ""
-            this.storyDesc = ""
-            this.$emit('storyAdded')
-        } catch {
+      async updateMark(){
+        // try {
+            await this.$store.dispatch('updateMark', {id: this.mark_id, mark: this.mark } )
+            this.$emit('evaluated')
+            
+        // } catch {
 
-        }
+        // }
       }
   }
 };

@@ -55,7 +55,7 @@
                   </div>
               </div> -->
             <div class="evaluation ml-5">
-                    <div v-on:click="openEvalModal()" v-for="mark in currentMarks" :key="mark" class=" w-36 rounded-xl bg-white mx-3 my-5 flex flex-col p-3 shadow-xl">
+                    <div v-on:click="openEvalModal(mark.id)" v-for="mark in currentMarks" :key="mark" class=" w-36 rounded-xl bg-white mx-3 my-5 flex flex-col p-3 shadow-xl">
                         <div v-if="mark.mark == undefined" class="mark font-bold text-6xl">#</div>
                         <!-- <div v-else class="mark font-bold text-6xl">{{mark.mark}}</div> -->
                         <div v-else class="mark font-bold text-6xl">{{mark.mark == 0 ? '#' : mark.mark}}</div>
@@ -72,7 +72,7 @@
 
           </div>
             <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
-            <EvaluateStory :open="getopeeval" @cancelModal="openEvalModal" @storyAdded="fetch" />
+            <EvaluateStory :open="getopeeval" :mark_id="getSelectedMarkId" @evaluated="fetchMarks(this.selected_story)" @cancelModal="openEvalModal" />
       </div>
 
 </template>
@@ -95,6 +95,8 @@ export default {
         return {
             open: false,
             open_eval: false,
+            seleted_mark_id: undefined,
+            selected_story: undefined,
         }
     },
     
@@ -108,6 +110,9 @@ export default {
         getopeeval(){
             return this.open_eval
         },
+        getSelectedMarkId(){
+            return this.seleted_mark_id;
+        },
         getopen(){
             return this.open;
         }
@@ -120,16 +125,19 @@ export default {
         async fetch(){
             await this.$store.dispatch('fetchStoriesInRoom', this.id)
         },
-        openEvalModal(){
+        openEvalModal(id){
+            this.seleted_mark_id = id
             this.open_eval = !this.open_eval
         },
         openModal(){
             this.open = !this.open
         },
         async fetchMarks(id){
+            this.selected_story = id
             await this.$store.dispatch('fetchCurrentMarks', id)
         },
         async startSession(id){
+            this.selected_story = id
             await this.$store.dispatch('startSession', id)
             await this.fetch()
             await this.$store.dispatch('fetchCurrentMarks', id)
