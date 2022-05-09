@@ -1,14 +1,18 @@
 
-import { fetchRoomsService, fetchStoriesInRoomsService, addStoryInRoomService } from '../services'
+import { fetchRoomsService, fetchStoriesInRoomsService, addStoryInRoomService, fetchMembersInRoomService } from '../services'
 
 const rooms_state = {
     state: () => ({ 
         rooms: [],
-        storiesInRoom: []
+        storiesInRoom: [],
+        membersInRoom: []
      }),
     mutations: { 
         setRooms(state, payload){
           state.rooms = payload
+        },
+        setMembersInRoom(state, payload){
+          state.membersInRoom = payload
         },
         setStoriesInRoom(state, payload){
           state.storiesInRoom = payload
@@ -28,6 +32,11 @@ const rooms_state = {
       async AddStory(contex, story){
         var response = await addStoryInRoomService(story)
         console.log(response)
+      },
+
+      async fetchMembersInRoom(contex, room_id){
+        var response = await fetchMembersInRoomService(room_id)
+        contex.commit('setMembersInRoom', response.data)
       },
 
      }

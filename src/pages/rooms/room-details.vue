@@ -1,15 +1,17 @@
 <template>
 
-      <div class="flex flex-row w-full h-full ">
-          <div class="user-stories w-1/3 bg-slate-200 flex flex-col ">
-                <div class="story  flex my-5">
+      <div class="flex flex-row w-full h-screen ">
+          <div class="user-stories w-1/3 bg-slate-200 ">
+          
+                <div class="story flex my-5">
                     <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Import / Export </button>
                     <button v-on:click="openModal" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Add story </button>
                     <!-- <button class=" bg-blue-500 px-3 h-7 mx-3 text-white font-bold">  </button> -->
                 </div>
 
                 <!-- User Story card -->
-                <div v-on:click="fetchMarks(story.id)" v-for="story in storiesInRoom" :key="story.id" class="story h-26 bg-white flex flex-col px-3 py-2 mx-2 my-1">
+                <div class=" h-5/6 overflow-auto hidescroll ">
+                    <div v-on:click="fetchMarks(story.id)" v-for="story in storiesInRoom" :key="story.id" class="story h-26 bg-white flex flex-col px-3 py-2 mx-2 my-1">
                     <div class="flex">
                         <div class="title text-left text-sm uppercase font-bold">{{story.title}}</div>
                         <div class="di flex-grow"></div>
@@ -29,6 +31,7 @@
                         <a class=" text-blue-700 mx-2 hover:cursor-pointer text-xs ">Details</a>
                     </div>
                 </div>
+            </div>
 
           </div>
           <div class=" flex-grow basis-2 ">
@@ -37,7 +40,7 @@
                     <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Finalise </button>
                     <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Show Marks </button>
                     <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Refresh </button>
-                    <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Invite </button>
+                    <button v-on:click="openInviteUserModal()" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Invite </button>
                 </div>
 
               <!-- {{currentMarks}} Somthing -->
@@ -72,6 +75,7 @@
 
           </div>
             <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
+            <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :roomId="id" />
             <EvaluateStory :open="getopeeval" :mark_id="getSelectedMarkId" @evaluated="fetchMarks(this.selected_story)" @cancelModal="openEvalModal" />
       </div>
 
@@ -80,6 +84,7 @@
 <script>
 import AddUSerStoryModal from './add_user_story.vue'
 import EvaluateStory from './evaluate_story.vue'
+import InviteUser from './invite_users.vue'
 import { ExclamationIcon } from "@heroicons/vue/outline";
 
 export default {
@@ -89,12 +94,14 @@ export default {
     components: {
         AddUSerStoryModal,
         EvaluateStory,
-        ExclamationIcon
+        ExclamationIcon,
+        InviteUser
     },
     data() {
         return {
             open: false,
             open_eval: false,
+            open_invite_user: false,
             seleted_mark_id: undefined,
             selected_story: undefined,
         }
@@ -107,6 +114,9 @@ export default {
         currentMarks(){
             return this.$store.state.marks.current_marks
         },
+        getInviteUser(){
+            return this.open_invite_user
+        },
         getopeeval(){
             return this.open_eval
         },
@@ -118,12 +128,16 @@ export default {
         }
     },
     mounted() {
-        this.fetch()
+        this.fetch();
+        this.fetchMembers();
     },
 
     methods: {
         async fetch(){
             await this.$store.dispatch('fetchStoriesInRoom', this.id)
+        },
+        async fetchMembers(){
+            await this.$store.dispatch('fetchMembersInRoom', this.id)
         },
         openEvalModal(id){
             this.seleted_mark_id = id
@@ -132,10 +146,14 @@ export default {
         openModal(){
             this.open = !this.open
         },
+        openInviteUserModal(){
+            this.open_invite_user = !this.open_invite_user
+        },
         async fetchMarks(id){
             this.selected_story = id
             await this.$store.dispatch('fetchCurrentMarks', id)
         },
+        
         async startSession(id){
             this.selected_story = id
             await this.$store.dispatch('startSession', id)
@@ -149,6 +167,16 @@ export default {
 </script>
 
 <style>
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hidescroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hidescroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 .evaluation {
     display: flex;
     flex-wrap: wrap;
