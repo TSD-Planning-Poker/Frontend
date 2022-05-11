@@ -75,7 +75,7 @@
 
           </div>
             <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
-            <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :roomId="id" />
+            <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :room_id="id" />
             <EvaluateStory :open="getopeeval" :mark_id="getSelectedMarkId" @evaluated="fetchMarks(this.selected_story)" @cancelModal="openEvalModal" />
       </div>
 

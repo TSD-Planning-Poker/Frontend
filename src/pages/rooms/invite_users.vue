@@ -61,7 +61,7 @@
                           >
                             <span class="flex items-center">
                               <span class="ml-3 block truncate">{{
-                                selected.name
+                                selected.username
                               }}</span>
                             </span>
                             <span
@@ -82,9 +82,10 @@
                             <ListboxOptions
                               class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-56 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
                             >
-                              <ListboxOption
+                              <div class="">
+                                <ListboxOption
                                 as="template"
-                                v-for="person in people"
+                                v-for="person in allUsers"
                                 :key="person.id"
                                 :value="person"
                                 v-slot="{ active, selected }"
@@ -106,7 +107,7 @@
                                         'ml-3 block truncate',
                                       ]"
                                     >
-                                      {{ person.name }}
+                                      {{ person.username }}
                                     </span>
                                   </div>
 
@@ -124,6 +125,7 @@
                                   </span>
                                 </li>
                               </ListboxOption>
+                              </div>
                             </ListboxOptions>
                           </transition>
                         </div>
@@ -200,9 +202,9 @@
                 <button
                   type="button"
                   class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  @click="updateMark()"
+                  @click="InviteUser()"
                 >
-                  Evaluate
+                  Invite
                 </button>
                 <button
                   type="button"
@@ -252,84 +254,29 @@ export default {
     TransitionChild,
     TransitionRoot,
   },
+  
+  created() {
+    this.$store.dispatch('allUsers')
+  },
 
   computed: {
+    allUsers(){
+      return this.$store.state.users.all_users
+    },
+    
     members() {
       return this.$store.state.rooms.membersInRoom;
     },
   },
-  props: ["open", "mark_id"],
+  props: ["open", "room_id"],
   data() {
     return {
       mark: 0,
-      people: [
-        {
-          id: 1,
-          name: "Wade Cooper",
-          avatar:
-            "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 2,
-          name: "Arlene Mccoy",
-          avatar:
-            "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 3,
-          name: "Devon Webb",
-          avatar:
-            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80",
-        },
-        {
-          id: 4,
-          name: "Tom Cook",
-          avatar:
-            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 5,
-          name: "Tanya Fox",
-          avatar:
-            "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 6,
-          name: "Hellen Schmidt",
-          avatar:
-            "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 7,
-          name: "Caroline Schultz",
-          avatar:
-            "https://images.unsplash.com/photo-1568409938619-12e139227838?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 8,
-          name: "Mason Heaney",
-          avatar:
-            "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 9,
-          name: "Claudie Smitham",
-          avatar:
-            "https://images.unsplash.com/photo-1584486520270-19eca1efcce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-        {
-          id: 10,
-          name: "Emil Schaefer",
-          avatar:
-            "https://images.unsplash.com/photo-1561505457-3bcad021f8ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-        },
-      ],
+      
       selected: {
-        id: 10,
-        name: "Emil Schaefer",
-        avatar:
-          "https://images.unsplash.com/photo-1561505457-3bcad021f8ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-      },
+        id: 0,
+        username: "No User",
+        },
     };
   },
 
@@ -337,6 +284,14 @@ export default {
     sendTrigger() {
       this.$emit("onCancel");
     },
+    async InviteUser(){
+      
+      await this.$store.dispatch("inviteUser", {
+        to_user: this.selected.id,
+        room: this.room_id,
+      });
+    },
+
     async updateMark() {
       await this.$store.dispatch("updateMark", {
         id: this.mark_id,

@@ -5,6 +5,8 @@ import {
   fetchMembersInRoomService,
 } from "./room_services";
 import { startSessionService } from "./stories_services";
+import { allUsersService } from "./auth_services";
+import { InviteUser } from "./users_services";
 import { fetchCurrentMarks, UpdateMarkService } from "./marks_services";
 
 export {
@@ -14,5 +16,7 @@ export {
   startSessionService,
   fetchCurrentMarks,
   fetchMembersInRoomService,
+  allUsersService,
+  InviteUser,
   UpdateMarkService
 };
