@@ -159,13 +159,7 @@
                             >
                               <li v-for="member in members" :key="member" class="pt-3 pb-0 sm:pt-4">
                                 <div class="flex items-center space-x-4">
-                                  <div class="flex-shrink-0">
-                                    <img
-                                      class="w-8 h-8 rounded-full"
-                                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                                      alt="Thomas image"
-                                    />
-                                  </div>
+                                  
                                   <div class="flex-1 min-w-0">
                                     <p
                                       class="text-sm font-medium text-gray-900 truncate"

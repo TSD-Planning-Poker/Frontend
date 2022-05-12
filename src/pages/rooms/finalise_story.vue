@@ -45,7 +45,7 @@
                       as="h3"
                       class="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Update Mark
+                      Finalise Story With Mark
                     </DialogTitle>
                     <div class="mt-2 flex flex-col ">
                       <input type="number" max="10" min="0" v-model="mark" class=" w-40 border-2 rounded-sm px-2 py-1 mt-2" placeholder="Story title" />
@@ -59,9 +59,9 @@
                 <button
                   type="button"
                   class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  @click="updateMark()"
+                  @click="finiliseUserStory()"
                 >
-                  Evaluate
+                  Finalise Story
                 </button>
                 <button
                   type="button"
@@ -97,7 +97,7 @@ export default {
     TransitionChild,
     TransitionRoot,
   },
-  props: ["open", "mark_id"],
+  props: ["open", "story_id"],
   data() {
     return {
       mark: 0,
@@ -108,10 +108,9 @@ export default {
       sendTrigger(){
           this.$emit('onCancel')
       },
-      async updateMark(){
-            await this.$store.dispatch('updateMark', {id: this.mark_id, mark: this.mark } )
+      async finiliseUserStory(){
+            await this.$store.dispatch('finiliseUserStory', { id: this.story_id, final_mark: this.mark } )
             this.$emit('evaluated')
-            
       }
   }
 };

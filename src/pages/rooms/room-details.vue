@@ -24,7 +24,12 @@
                     </div>
                     <div class="description text-left text-xs text-slate-500 line-clamp-2 mt-2">{{story.description}}</div>
                     <div class="flex mt-2">
-                        <div class="text-xs mt-auto px-3 py-0.5  font-bold bg-red-300 text-red-900">{{"pendding"}}</div>
+                        <div 
+                        class="text-xs mt-auto px-3 py-0.5  font-bold "
+                        :class=" story.completed ? 'bg-green-300 text-green-900' : story.evaluated ? 'bg-amber-300 text-amber-900' :  'bg-red-300 text-red-900'"
+                        >
+                        {{ story.completed ? "Completed" : story.evaluated ? "Evaluated" :  "Pendding" }}
+                        </div>
                         <div class="di flex-grow"></div>
                         <a class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
                         <a class=" text-blue-700 mx-2 hover:cursor-pointer text-xs ">Tasks</a>
@@ -34,14 +39,20 @@
             </div>
 
           </div>
+          
           <div class=" flex-grow basis-2 ">
 
-               <div class="story  flex flex-row-reverse my-5">
-                    <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Finalise </button>
+              <div class="flex flex-col">
+                  <room-alert v-if="selected_story != undefined && getSelectedStoryStatus != 'pendding' " :status="getSelectedStoryStatus" />
+                  <div class="story  flex flex-row-reverse my-5">
+                    <button v-on:click="openFinailiseModal()" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Finalise </button>
                     <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Show Marks </button>
                     <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Refresh </button>
                     <button v-on:click="openInviteUserModal()" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Invite </button>
                 </div>
+                
+              </div>
+               
 
               <!-- {{currentMarks}} Somthing -->
 
@@ -77,6 +88,7 @@
             <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
             <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :room_id="id" />
             <EvaluateStory :open="getopeeval" :mark_id="getSelectedMarkId" @evaluated="fetchMarks(this.selected_story)" @cancelModal="openEvalModal" />
+            <FinaliseStory :open="open_finalise_story" :story_id="getSelectedStoryId" @evaluated="fetchMarks(this.selected_story)" @cancelModal="openFinailiseModal" />
       </div>
 
 </template>
@@ -85,6 +97,8 @@
 import AddUSerStoryModal from './add_user_story.vue'
 import EvaluateStory from './evaluate_story.vue'
 import InviteUser from './invite_users.vue'
+import FinaliseStory from './finalise_story.vue'
+import RoomAlert from './room_alert.vue'
 import { ExclamationIcon } from "@heroicons/vue/outline";
 
 export default {
@@ -94,8 +108,10 @@ export default {
     components: {
         AddUSerStoryModal,
         EvaluateStory,
+        FinaliseStory,
+        InviteUser,
+        RoomAlert,
         ExclamationIcon,
-        InviteUser
     },
     data() {
         return {
@@ -104,6 +120,7 @@ export default {
             open_invite_user: false,
             seleted_mark_id: undefined,
             selected_story: undefined,
+            open_finalise_story: false
         }
     },
     
@@ -114,8 +131,25 @@ export default {
         currentMarks(){
             return this.$store.state.marks.current_marks
         },
+        getSelectedStoryStatus(){
+            var stories = this.$store.state.rooms.storiesInRoom
+            var selected = stories.find(story => story.id == this.selected_story)
+            if (selected.completed){
+                return 'completed'
+            } else if(selected.evaluated){
+                return 'evaluated'
+            } else {
+                return  'pendding'
+            }
+        }, 
+        getSelectedStoryId(){
+                return this.selected_story
+        },
         getInviteUser(){
             return this.open_invite_user
+        },
+        getOpenFinaliseStory(){
+            return this.open_finalise_story
         },
         getopeeval(){
             return this.open_eval
@@ -146,19 +180,22 @@ export default {
         openModal(){
             this.open = !this.open
         },
+        openFinailiseModal(){
+            this.open_finalise_story = !this.open_finalise_story
+        },
         openInviteUserModal(){
             this.open_invite_user = !this.open_invite_user
         },
         async fetchMarks(id){
             this.selected_story = id
             await this.$store.dispatch('fetchCurrentMarks', id)
+            await this.fetch()
         },
         
         async startSession(id){
             this.selected_story = id
             await this.$store.dispatch('startSession', id)
             await this.fetch()
-            await this.$store.dispatch('fetchCurrentMarks', id)
 
         }
     },
