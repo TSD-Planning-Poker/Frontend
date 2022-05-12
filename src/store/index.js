@@ -1,6 +1,9 @@
 
 import { createStore } from 'vuex'
 import rooms from './rooms'
+import stories from './stories'
+import marks from './marks'
+import users from './users'
 
 // Create a new store instance.
 const store = createStore({
@@ -15,7 +18,10 @@ const store = createStore({
       }
     },
     modules: {
-        rooms: rooms
+        rooms: rooms,
+        stories: stories,
+        marks: marks,
+        users: users
     }
   })
 

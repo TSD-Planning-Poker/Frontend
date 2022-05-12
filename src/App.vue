@@ -4,7 +4,9 @@
 </script>
 
 <template>
-  <router-view ></router-view>
+<notifications />
+
+<router-view ></router-view>
 
 </template>
 
