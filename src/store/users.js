@@ -1,14 +1,18 @@
 
-import { allUsersService, InviteUser } from '../services'
+import { allUsersService, InviteUser, Login, Logout } from '../services'
 
 const users_state = {
     state: () => ({ 
-        all_users: []
+        all_users: [],
+        userToken: "",
      }),
     mutations: { 
         setAllUsers(state, payload){
             state.all_users = payload
         },
+        setUserToken(state, payload){
+          state.userToken = payload
+        }
         
      },
     actions: { 
@@ -23,7 +27,17 @@ const users_state = {
         console.log(response)
         
       },
+      async Login(context, data){
+        var response = await Login(data)
+        context.commit('setUserToken', response.data.token)
+        console.log(response)
+      },
 
+      async Logout(context){
+        var response = await Logout()
+        context.commit('setUserToken', "")
+        console.log(response)
+      }
       
      }
   }

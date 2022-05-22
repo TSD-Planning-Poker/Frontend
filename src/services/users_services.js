@@ -25,3 +25,45 @@ export async function InviteUser(data){
     
     
 }
+export async function Login(data) {
+    try {
+        var response = await api.post(`auth/login/`, data)
+        console.log(response)
+        notify({
+            type: 'success',
+            title: `${data.username}`,
+            text: `Logged in`,
+        });
+        return response
+    } catch (error) {
+        console.log(error)
+        notify({
+            type: 'error',
+            title: `ERROR`,
+            text: `You need to provide valid authentication credentials`,
+        });
+        return error
+    }
+}
+
+
+export async function Logout() {
+    try {
+        var response = await api.post(`auth/logout/`)
+        console.log(response)
+        notify({
+            type: 'success',
+            title: ``,
+            text: `Succesfully logged out`,
+        });
+        return response
+    } catch (error) {
+        console.log(error)
+        notify({
+            type: 'error',
+            title: `ERROR`,
+            text: `you have already been logged out`,
+        });
+        return error
+    }
+}
