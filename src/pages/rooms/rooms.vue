@@ -28,6 +28,7 @@
           <div class=" text-xs mt-auto"> {{i.members.length}} Members</div>
         </div>
     </div>
+    {{invitations}}
       
   </div>
 </div>
@@ -40,11 +41,15 @@ export default {
 
   mounted() {
     this.$store.dispatch('fetchRooms', '')
+    this.$store.dispatch('getInvitations')
   },
 
   computed: {
     rooms(){
       return this.$store.state.rooms.rooms
+    },
+    invitations(){
+      return this.$store.state.users.all_invitations
     }
   },
 

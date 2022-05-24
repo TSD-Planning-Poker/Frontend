@@ -25,10 +25,32 @@ export async function InviteUser(data){
     
     
 }
+
+export async function GetInvitations(){ 
+    try {
+        var response = await api.get(`/api/invitations/`)
+        console.log(response)
+        // notify({
+        //     type: 'success',
+        //     title: `${response}`,
+        //     text: ``,
+        //   });
+        return response
+    } catch(error) {
+        console.log(error)
+        // notify({
+        //     type: 'error',
+        //     title: `${error}`,
+        //     text: ``,
+        //   });
+          return error.response
+    }
+    
+    
+}
 export async function Login(data) {
     try {
         var response = await api.post(`auth/login/`, data)
-        console.log(response)
         notify({
             type: 'success',
             title: `${data.username}`,
@@ -50,7 +72,7 @@ export async function Login(data) {
 export async function Logout() {
     try {
         var response = await api.post(`auth/logout/`)
-        console.log(response)
+
         notify({
             type: 'success',
             title: ``,
