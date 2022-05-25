@@ -1,6 +1,30 @@
+import {
+  fetchRoomsService,
+  fetchStoriesInRoomsService,
+  addStoryInRoomService,
+  fetchMembersInRoomService,
+} from "./room_services";
+import { startSessionService, finiliseUserStoryService } from "./stories_services";
+import { allUsersService } from "./auth_services";
+import { AddTask, fetchCurrentTasks } from "./task_services";
+import { InviteUser, GetInvitations, AcceptInvitiation, Login, Logout } from "./users_services";
+import { fetchCurrentMarks, UpdateMarkService } from "./marks_services";
 
-
-import { fetchRoomsService } from "./room_services";
-
-
-export { fetchRoomsService }
+export {
+  fetchRoomsService,
+  fetchStoriesInRoomsService,
+  addStoryInRoomService,
+  startSessionService,
+  fetchCurrentMarks,
+  fetchMembersInRoomService,
+  allUsersService,
+  finiliseUserStoryService,
+  InviteUser,
+  GetInvitations,
+  AcceptInvitiation,
+  Login, 
+  Logout,
+  UpdateMarkService,
+  AddTask,
+  fetchCurrentTasks
+};

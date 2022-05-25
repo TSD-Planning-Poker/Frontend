@@ -77,7 +77,7 @@
                     </li>
 
                     <li>
-                        <a href="#"
+                        <a href="#" 
                             class="flex items-center text-sm font-semibold text-gray-500 hover:text-indigo-600 transition duration-200"
                             hover:text-indigo-600>
                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -101,7 +101,7 @@
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
                 </div>
-                <a href="#"
+                <a href="#" @click="logout"
                     class="block font-semibold text-gray-500 hover:text-indigo-600 transition duration-200">Logout</a>
             </div>
         </div>
@@ -112,7 +112,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+    methods:{
+        async logout(){
+            await this.$store.dispatch("Logout");
+            this.$router.push('authorization'); 
+        }
+    }
+};
 </script>
 
 <style>

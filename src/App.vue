@@ -4,8 +4,11 @@
 </script>
 
 <template>
-  <router-view ></router-view>
+  <div>
+    <notifications />
 
+    <router-view></router-view>
+  </div>
 </template>
 
 <style>
