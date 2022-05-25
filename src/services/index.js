@@ -6,7 +6,8 @@ import {
 } from "./room_services";
 import { startSessionService, finiliseUserStoryService } from "./stories_services";
 import { allUsersService } from "./auth_services";
-import { InviteUser, GetInvitations, Login, Logout } from "./users_services";
+import { AddTask, fetchCurrentTasks } from "./task_services";
+import { InviteUser, GetInvitations, AcceptInvitiation, Login, Logout } from "./users_services";
 import { fetchCurrentMarks, UpdateMarkService } from "./marks_services";
 
 export {
@@ -20,7 +21,10 @@ export {
   finiliseUserStoryService,
   InviteUser,
   GetInvitations,
+  AcceptInvitiation,
   Login, 
   Logout,
-  UpdateMarkService
+  UpdateMarkService,
+  AddTask,
+  fetchCurrentTasks
 };

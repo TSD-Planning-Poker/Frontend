@@ -1,5 +1,4 @@
 import axios from "axios";
-import store from "../store"
 
 const api = axios.create({
     baseURL: 'http://localhost:8000/',
@@ -7,7 +6,7 @@ const api = axios.create({
   });
 
   api.interceptors.request.use(function (config) {
-    const token = store.state.users.userToken 
+    const token = localStorage.getItem("userToken") 
 
     if (token) {
       config.headers.Authorization = `Token ${token}`
