@@ -58,6 +58,27 @@ export async function GetInvitations() {
 
 
 }
+
+export async function Register(data) {
+    try {
+        var response = await api.post(`auth/register/`, data)
+        notify({
+            type: 'success',
+            title: `${data.username}`,
+            text: `Registered`,
+        });
+        return response
+    } catch (error) {
+        console.log(error)
+        notify({
+            type: 'error',
+            title: `ERROR`,
+            text: `Check again if all fields are corret`,
+        });
+        return error
+    }
+}
+
 export async function Login(data) {
     try {
         var response = await api.post(`auth/login/`, data)
