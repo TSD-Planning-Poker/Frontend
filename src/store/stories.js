@@ -1,5 +1,5 @@
 
-import { startSessionService, finiliseUserStoryService, exportUserStoriesService, exportUserStoriesFromSingleRoom } from '../services'
+import { startSessionService, finiliseUserStoryService, exportUserStoriesService, exportUserStoriesFromSingleRoom, importUserStoriesFromSingleRoom} from '../services'
 
 const stories_state = {
   state: () => ({
@@ -24,8 +24,12 @@ const stories_state = {
       context.commit('setExportFile', response.data.exportPath);
     },
     async exportUserStoriesSingleRoom(context, data){
-      var response = await exportUserStoriesService(data);
+      var response = await exportUserStoriesFromSingleRoom(data);
       context.commit('setExportFile', response.data.exportPath);
+    },
+    async importUserStoriesSingleRoom(context, data){
+     localStorage.setItem("multipart", true)
+    var response = await importUserStoriesFromSingleRoom(data);
     }
   }
 }

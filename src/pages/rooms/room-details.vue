@@ -4,13 +4,16 @@
         <div class="user-stories w-1/3 bg-slate-200 ">
 
             <div class="story flex my-5">
-                <button @click="exportUserStories" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+                <!-- exportUserStories -->
+                <button @click="openModalExport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
                     Export </button>
+                  <button @click="openModalImport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+                    Import </button>
                 <button v-on:click="openModal" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Add
                     story </button>
                 <!-- <button class=" bg-blue-500 px-3 h-7 mx-3 text-white font-bold">  </button> -->
             </div>
-            <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a>
+            <!-- <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a> -->
 
 
             <!-- User Story card -->
@@ -136,6 +139,8 @@
             </div>
         </div>
         <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
+        <ImportFileModal :open="getopenimport" @cancelModal="openModalImport" @fileImported="fetch" :roomId="id" />
+        <ExportFileModal :open="getopenexport" @cancelModal="openModalExport" :roomId="id" />
         <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :room_id="id" />
         <EvaluateStory :open="getopeeval" :mark_id="getSelectedMarkId" @evaluated="fetchMarks(this.selected_story)"
             @cancelModal="openEvalModal" />
@@ -147,6 +152,8 @@
 
 <script>
 import AddUSerStoryModal from './add_user_story.vue'
+import ImportFileModal from './import_file.vue'
+import ExportFileModal from './export_file.vue'
 import EvaluateStory from './evaluate_story.vue'
 import InviteUser from './invite_users.vue'
 import FinaliseStory from './finalise_story.vue'
@@ -159,6 +166,8 @@ export default {
 
     components: {
         AddUSerStoryModal,
+        ImportFileModal,
+        ExportFileModal,
         EvaluateStory,
         FinaliseStory,
         InviteUser,
@@ -175,6 +184,8 @@ export default {
             open_finalise_story: false,
             taskTitle: "",
             taskDesc: "",
+            open_import: false,
+            open_export: false,
         }
     },
 
@@ -217,9 +228,15 @@ export default {
         getopen() {
             return this.open;
         },
-        exportUrl() {
-            return this.$store.state.stories.exportUrl
-        }
+        getopenimport(){
+            return this.open_import;
+        },
+        getopenexport(){
+            return this.open_export;
+        },
+        // exportUrl() {
+        //     return this.$store.state.stories.exportUrl
+        // }
 
     },
     mounted() {
@@ -237,10 +254,12 @@ export default {
         async fetchTasksInUserStory() {
             await this.$store.dispatch('fetchCurrentTasks', this.selected_story)
         },
-        async exportUserStories() {
-            await this.$store.dispatch('exportUserStoriesSingleRoom', { delimiter: '!', id: this.id })
-            document.getElementById("exportLink").click();
-
+        // async exportUserStories() {
+        //     await this.$store.dispatch('exportUserStoriesSingleRoom', { delimiter: '!', id: this.id })
+        //     document.getElementById("exportLink").click();
+        // },
+        async importUserStories(){
+            await this.$store.dispatch('importUserStoriesSingleRoom', { delimiter: '!', id: this.id })
         },
         openEvalModal(id) {
             this.seleted_mark_id = id
@@ -248,6 +267,12 @@ export default {
         },
         openModal() {
             this.open = !this.open
+        },
+        openModalImport(){
+            this.open_import = !this.open_import
+        },
+        openModalExport(){
+            this.open_export = !this.open_export
         },
         openNewTaskModal() {
             this.openNewTask = !this.openNewTask

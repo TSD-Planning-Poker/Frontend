@@ -7,12 +7,16 @@ const api = axios.create({
 
   api.interceptors.request.use(function (config) {
     const token = localStorage.getItem("userToken") 
+    const multipart = localStorage.getItem("multipart") 
 
     if (token) {
       config.headers.Authorization = `Token ${token}`
     }
 
-      // config.headers['Access-Control-Allow-Origin'] = '*';
+    if(multipart){
+      config.headers['Content-Type'] = "multipart/form-data";
+      console.log(config.headers)
+    }
 
     return config
   }, function (error) {

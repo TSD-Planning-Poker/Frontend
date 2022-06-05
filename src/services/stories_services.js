@@ -53,7 +53,7 @@ export async function exportUserStoriesService(data) {
 
 export async function exportUserStoriesFromSingleRoom(data) {
     try {
-        var response = await api.get(`/api/export/${data.delimites}/${data.id}`)
+        var response = await api.get(`/api/export/${data.delimiter}/${data.id}/`)
         notify({
             type: 'success',
             title: `success`,
@@ -65,6 +65,32 @@ export async function exportUserStoriesFromSingleRoom(data) {
         notify({
             type: 'error',
             title: `error during csv file creation`,
+            text: ``,
+        });
+        return error.response
+    }
+}
+
+
+export async function importUserStoriesFromSingleRoom(data) {
+    try {
+        console.log(data.file)
+        let formData = new FormData();
+        formData.append('file', data.file);
+        console.log(formData)
+        console.log(formData.get("file"))
+        var response = await api.post(`/api/import/${data.delimiter}/${data.id}/`, {"file": formData.get("file")})
+        notify({
+            type: 'success',
+            title: `success`,
+            text: ``,
+        });
+        return response
+    } catch (error) {
+        console.log(error)
+        notify({
+            type: 'error',
+            title: `error during csv file import`,
             text: ``,
         });
         return error.response

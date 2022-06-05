@@ -13,11 +13,11 @@
           id="roomname" placeholder="room name">
       </div>
 
-      <button @click="exportUserStories" class="mt-6 mr-5 bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+      <button @click="openModal" class="mt-6 mr-5 bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
         Export </button>
 
 
-      <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a>
+      <!-- <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a> -->
 
     </div>
 
@@ -60,11 +60,13 @@
       </div>
 
     </div>
+    <ExportFileModal :open="getopen" @cancelModal="openmodal" roomId="-1"/>
   </div>
 
 </template>
 
 <script>
+import ExportFileModal from './export_file.vue'
 
 export default {
 
@@ -72,7 +74,10 @@ export default {
     this.updateState()
     // this.$store.dispatch('getInvitations')
   },
+  components: {
+    ExportFileModal,
 
+  },
   computed: {
     rooms() {
       return this.$store.state.rooms.rooms
@@ -82,13 +87,16 @@ export default {
     },
     exportUrl() {
       return this.$store.state.stories.exportUrl
-    }
+    },
+     getopen() {
+            return this.open;
+        },
   },
 
   data() {
     return {
       search: "",
-      fileImportJira: '',
+            open: false,
     }
   },
 
@@ -101,6 +109,9 @@ export default {
       console.log("============searching", this.search)
       this.$store.dispatch('fetchRooms', this.search)
     },
+    openModal() {
+            this.open = !this.open
+        },
 
     navigateRoom(room) {
       console.log(room)
@@ -115,9 +126,6 @@ export default {
       await this.$store.dispatch('exportUserStories', { delimiter: '!' })
       document.getElementById("exportLink").click();
     },
-    handleFileUpload() {
-      this.fileImportJira = this.$refs.fileImportJira.files[0];
-    }
   },
 
 }
