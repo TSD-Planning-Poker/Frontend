@@ -7,10 +7,17 @@
         <label class="block text-gray-700 text-xs text-left font-bold mb-0.5" for="username">
           search room
         </label>
+
         <input v-model="search" @input="searchRooms" type="search"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="roomname" placeholder="room name">
       </div>
+
+      <button @click="exportUserStories" class="mt-6 mr-5 bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+        Export </button>
+
+
+      <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a>
 
     </div>
 
@@ -72,12 +79,16 @@ export default {
     },
     invitations() {
       return this.$store.state.users.all_invitations
+    },
+    exportUrl() {
+      return this.$store.state.stories.exportUrl
     }
   },
 
   data() {
     return {
       search: "",
+      fileImportJira: '',
     }
   },
 
@@ -99,6 +110,13 @@ export default {
       this.$store.dispatch('acceptInvitiation', { invitation_code: invitation.code })
       this.updateState()
       this.updateState()
+    },
+    async exportUserStories() {
+      await this.$store.dispatch('exportUserStories', { delimiter: '!' })
+      document.getElementById("exportLink").click();
+    },
+    handleFileUpload() {
+      this.fileImportJira = this.$refs.fileImportJira.files[0];
     }
   },
 

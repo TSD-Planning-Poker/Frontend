@@ -12,6 +12,8 @@ const api = axios.create({
       config.headers.Authorization = `Token ${token}`
     }
 
+      // config.headers['Access-Control-Allow-Origin'] = '*';
+
     return config
   }, function (error) {
     return Promise.reject(error)

@@ -4,7 +4,7 @@ import {
   addStoryInRoomService,
   fetchMembersInRoomService,
 } from "./room_services";
-import { startSessionService, finiliseUserStoryService } from "./stories_services";
+import { startSessionService, finiliseUserStoryService, exportUserStoriesService, exportUserStoriesFromSingleRoom } from "./stories_services";
 import { allUsersService } from "./auth_services";
 import { AddTask, fetchCurrentTasks } from "./task_services";
 import { InviteUser, GetInvitations, AcceptInvitiation, Login, Logout } from "./users_services";
@@ -19,6 +19,8 @@ export {
   fetchMembersInRoomService,
   allUsersService,
   finiliseUserStoryService,
+  exportUserStoriesService,
+  exportUserStoriesFromSingleRoom,
   InviteUser,
   GetInvitations,
   AcceptInvitiation,
