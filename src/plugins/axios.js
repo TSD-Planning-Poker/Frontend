@@ -16,8 +16,8 @@ const api = axios.create({
     if(multipart){
       config.headers['Content-Type'] = "multipart/form-data";
       console.log(config.headers)
+      localStorage.setItem("multipart", false)
     }
-
     return config
   }, function (error) {
     return Promise.reject(error)
