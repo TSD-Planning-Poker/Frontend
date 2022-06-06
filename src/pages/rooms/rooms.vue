@@ -7,10 +7,17 @@
         <label class="block text-gray-700 text-xs text-left font-bold mb-0.5" for="username">
           search room
         </label>
+
         <input v-model="search" @input="searchRooms" type="search"
           class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           id="roomname" placeholder="room name">
       </div>
+
+      <button @click="openModal" class="mt-6 mr-5 bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+        Export </button>
+
+
+      <!-- <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a> -->
 
     </div>
 
@@ -53,11 +60,13 @@
       </div>
 
     </div>
+    <ExportFileModal :open="getopen" @cancelModal="openmodal" roomId="-1"/>
   </div>
 
 </template>
 
 <script>
+import ExportFileModal from './export_file.vue'
 
 export default {
 
@@ -65,19 +74,29 @@ export default {
     this.updateState()
     // this.$store.dispatch('getInvitations')
   },
+  components: {
+    ExportFileModal,
 
+  },
   computed: {
     rooms() {
       return this.$store.state.rooms.rooms
     },
     invitations() {
       return this.$store.state.users.all_invitations
-    }
+    },
+    exportUrl() {
+      return this.$store.state.stories.exportUrl
+    },
+     getopen() {
+            return this.open;
+        },
   },
 
   data() {
     return {
       search: "",
+            open: false,
     }
   },
 
@@ -90,6 +109,9 @@ export default {
       console.log("============searching", this.search)
       this.$store.dispatch('fetchRooms', this.search)
     },
+    openModal() {
+            this.open = !this.open
+        },
 
     navigateRoom(room) {
       console.log(room)
@@ -99,7 +121,11 @@ export default {
       this.$store.dispatch('acceptInvitiation', { invitation_code: invitation.code })
       this.updateState()
       this.updateState()
-    }
+    },
+    async exportUserStories() {
+      await this.$store.dispatch('exportUserStories', { delimiter: '!' })
+      document.getElementById("exportLink").click();
+    },
   },
 
 }

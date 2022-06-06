@@ -4,11 +4,17 @@
         <div class="user-stories w-1/3 bg-slate-200 ">
 
             <div class="story flex my-5">
-                <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Import / Export </button>
+                <!-- exportUserStories -->
+                <button @click="openModalExport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+                    Export </button>
+                  <button @click="openModalImport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+                    Import </button>
                 <button v-on:click="openModal" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Add
                     story </button>
                 <!-- <button class=" bg-blue-500 px-3 h-7 mx-3 text-white font-bold">  </button> -->
             </div>
+            <!-- <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a> -->
+
 
             <!-- User Story card -->
             <div class=" h-5/6 overflow-auto hidescroll ">
@@ -32,8 +38,8 @@
                         </div>
                         <div class="di flex-grow"></div>
                         <a class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
-                        <a @click="openNewTaskModal" class=" text-blue-700 mx-2 hover:cursor-pointer text-xs ">Add
-                            task</a>
+                        <a @click="exportUserStories"
+                            class=" text-blue-700 mx-2 hover:cursor-pointer text-xs ">Export</a>
                         <a class=" text-blue-700 mx-2 hover:cursor-pointer text-xs ">Details</a>
                     </div>
                 </div>
@@ -81,7 +87,8 @@
                     <div class="mark font-bold text-sm text-left">Dev: {{ mark.evaluator__username }}</div>
                     <div class="mark text-xs text-left font-bold "
                         :class="mark.mark == 0 ? 'text-amber-500' : 'text-green-500'">
-                        {{ mark.mark == 0 ? 'Waiting evaluation...' : mark.mark == undefined ? 'Locked' : 'Evaluated!' }}
+                        {{ mark.mark == 0 ? 'Waiting evaluation...' : mark.mark == undefined ? 'Locked' : 'Evaluated!'
+                        }}
                     </div>
                 </div>
 
@@ -93,7 +100,7 @@
 
                     <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <h3 class="text-lg leading-6 font-medium text-gray-900 text-center">
-                            Add New Task 
+                            Add New Task
                         </h3>
                         <div class="mt-2 flex flex-col ">
                             <input type="text" v-model="taskTitle" class=" w-96 border-2 rounded-sm px-2 py-1 mt-2"
@@ -115,22 +122,25 @@
                         Cancel
                     </button>
 
-                    </div>
-                    <div class="mt-10">
-                            <div v-for="task in currentTasks" :key="task" class=" rounded-lg bg-gray-100 m-2 mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                            <h3 class="text-lg leading-6  font-medium text-gray-900 text-center">
-                            {{task.title}}
-                             <span class="text-lg pt-2 pb-2  text-gray-500 text-center">
-                                - {{task.description}}
+                </div>
+                <div class="mt-10">
+                    <div v-for="task in currentTasks" :key="task"
+                        class=" rounded-lg bg-gray-100 m-2 mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6  font-medium text-gray-900 text-center">
+                            {{ task.title }}
+                            <span class="text-lg pt-2 pb-2  text-gray-500 text-center">
+                                - {{ task.description }}
                             </span>
-                            </h3>
+                        </h3>
 
-                           
+
                     </div>
                 </div>
             </div>
         </div>
         <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
+        <ImportFileModal :open="getopenimport" @cancelModal="openModalImport" @fileImported="fetch" :roomId="id" />
+        <ExportFileModal :open="getopenexport" @cancelModal="openModalExport" :roomId="id" />
         <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :room_id="id" />
         <EvaluateStory :open="getopeeval" :mark_id="getSelectedMarkId" @evaluated="fetchMarks(this.selected_story)"
             @cancelModal="openEvalModal" />
@@ -142,6 +152,8 @@
 
 <script>
 import AddUSerStoryModal from './add_user_story.vue'
+import ImportFileModal from './import_file.vue'
+import ExportFileModal from './export_file.vue'
 import EvaluateStory from './evaluate_story.vue'
 import InviteUser from './invite_users.vue'
 import FinaliseStory from './finalise_story.vue'
@@ -154,6 +166,8 @@ export default {
 
     components: {
         AddUSerStoryModal,
+        ImportFileModal,
+        ExportFileModal,
         EvaluateStory,
         FinaliseStory,
         InviteUser,
@@ -170,6 +184,8 @@ export default {
             open_finalise_story: false,
             taskTitle: "",
             taskDesc: "",
+            open_import: false,
+            open_export: false,
         }
     },
 
@@ -180,7 +196,7 @@ export default {
         currentMarks() {
             return this.$store.state.marks.current_marks
         },
-         currentTasks() {
+        currentTasks() {
             return this.$store.state.tasks.current_tasks
         },
         getSelectedStoryStatus() {
@@ -212,6 +228,15 @@ export default {
         getopen() {
             return this.open;
         },
+        getopenimport(){
+            return this.open_import;
+        },
+        getopenexport(){
+            return this.open_export;
+        },
+        // exportUrl() {
+        //     return this.$store.state.stories.exportUrl
+        // }
 
     },
     mounted() {
@@ -226,8 +251,15 @@ export default {
         async fetchMembers() {
             await this.$store.dispatch('fetchMembersInRoom', this.id)
         },
-        async fetchTasksInUserStory(){
+        async fetchTasksInUserStory() {
             await this.$store.dispatch('fetchCurrentTasks', this.selected_story)
+        },
+        // async exportUserStories() {
+        //     await this.$store.dispatch('exportUserStoriesSingleRoom', { delimiter: '!', id: this.id })
+        //     document.getElementById("exportLink").click();
+        // },
+        async importUserStories(){
+            await this.$store.dispatch('importUserStoriesSingleRoom', { delimiter: '!', id: this.id })
         },
         openEvalModal(id) {
             this.seleted_mark_id = id
@@ -235,6 +267,12 @@ export default {
         },
         openModal() {
             this.open = !this.open
+        },
+        openModalImport(){
+            this.open_import = !this.open_import
+        },
+        openModalExport(){
+            this.open_export = !this.open_export
         },
         openNewTaskModal() {
             this.openNewTask = !this.openNewTask
@@ -259,21 +297,21 @@ export default {
 
         },
 
-        async addTask(){
+        async addTask() {
             console.log(this.selected_story)
-        try {
-            await this.$store.dispatch('AddTask', {
+            try {
+                await this.$store.dispatch('AddTask', {
                     title: this.taskTitle,
                     description: this.taskDesc,
                     user_story: this.selected_story
                 })
-            this.taskTitle = ""
-            this.taskDesc = ""
-            this.fetchTasksInUserStory()
-        } catch {
+                this.taskTitle = ""
+                this.taskDesc = ""
+                this.fetchTasksInUserStory()
+            } catch {
 
+            }
         }
-      }
     },
 
 }
