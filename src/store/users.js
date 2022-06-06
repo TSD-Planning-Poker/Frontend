@@ -1,5 +1,5 @@
 
-import { allUsersService, InviteUser, AcceptInvitiation, GetInvitations, Login, Logout } from '../services'
+import { allUsersService, InviteUser, AcceptInvitiation, GetInvitations,Register, Login, Logout } from '../services'
 
 const users_state = {
   state: () => ({
@@ -40,6 +40,12 @@ const users_state = {
       console.log(response)
     },
 
+    async Register(context, data) {
+      var response = await Register(data)
+      response = await Login(data)
+      context.commit('setUserToken', {username: data.username, token: response.data.token})
+    },
+
     async Login(context, data) {
       var response = await Login(data)
       context.commit('setUserToken', {username: data.username, token: response.data.token})
@@ -49,6 +55,7 @@ const users_state = {
       var response = await Logout()
       context.commit('setUserToken', {username: '', token: ''})
     },
+   
   }
 }
 
