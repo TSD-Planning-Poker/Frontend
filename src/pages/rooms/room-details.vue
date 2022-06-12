@@ -75,6 +75,7 @@
                   <div class="txt">User story not selected</div>
                   </div>
               </div> -->
+              {{currentMarks}}
             <div class="evaluation ml-5 mb-40">
                 <div v-on:click="openEvalModal(mark.id)" v-for="mark in currentMarks" :key="mark"
                     class=" w-36 rounded-xl bg-white mx-3 my-5 flex flex-col p-3 shadow-xl">
@@ -128,6 +129,8 @@
                             <span class="text-lg pt-2 pb-2  text-gray-500 text-center">
                                 - {{ task.description }}
                             </span>
+
+                                   <a @click="openDeleteTask(task.id)" class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
                         </h3>
 
 
@@ -137,6 +140,7 @@
         </div>
         <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
         <DeleteUserStory :open="getopendelete" @cancelModal="openDelete" @storyDeleted="fetchDeleteStory" :storyId="storyId" />
+        <DeleteTask :open="getopendeletetask" @cancelModal="openDeleteTask" @taskDeleted="fetchTasksInUserStory" :taskId="taskId" />
         <ImportFileModal :open="getopenimport" @cancelModal="openModalImport" @fileImported="fetch" :roomId="id" />
         <ExportFileModal :open="getopenexport" @cancelModal="openModalExport" :roomId="id" />
         <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :room_id="id" />
@@ -151,6 +155,7 @@
 <script>
 import AddUSerStoryModal from './add_user_story.vue'
 import DeleteUserStory from './delete_user_story.vue'
+import DeleteTask from './delete_task.vue'
 import ImportFileModal from './import_file.vue'
 import ExportFileModal from './export_file.vue'
 import EvaluateStory from './evaluate_story.vue'
@@ -166,6 +171,7 @@ export default {
     components: {
         AddUSerStoryModal,
         DeleteUserStory,
+        DeleteTask,
         ImportFileModal,
         ExportFileModal,
         EvaluateStory,
@@ -187,7 +193,9 @@ export default {
             open_import: false,
             open_export: false,
             open_delete: false,
+            open_delete_task: false,
             storyId: -1,
+            taskId: -1,
         }
     },
 
@@ -230,6 +238,9 @@ export default {
         getopendelete(){
             return this.open_delete;
         },
+         getopendeletetask(){
+            return this.open_delete_task;
+        },
         getopen() {
             return this.open;
         },
@@ -262,12 +273,9 @@ export default {
             await this.$store.dispatch('fetchMembersInRoom', this.id)
         },
         async fetchTasksInUserStory() {
+            this.open_delete_task = false;
             await this.$store.dispatch('fetchCurrentTasks', this.selected_story)
         },
-        // async exportUserStories() {
-        //     await this.$store.dispatch('exportUserStoriesSingleRoom', { delimiter: '!', id: this.id })
-        //     document.getElementById("exportLink").click();
-        // },
         async importUserStories(){
             await this.$store.dispatch('importUserStoriesSingleRoom', { delimiter: '!', id: this.id })
         },
@@ -278,6 +286,10 @@ export default {
         openDelete(id){
             this.storyId = id
             this.open_delete = !this.open_delete;
+        },
+        openDeleteTask(id){
+            this.taskId = id
+            this.open_delete_task = !this.open_delete_task;
         },
         openModal() {
             this.open = !this.open
@@ -306,6 +318,7 @@ export default {
 
         async startSession(id) {
             this.selected_story = id
+            await this.fetchMarks(id)
             await this.$store.dispatch('startSession', id)
             await this.fetch()
 
@@ -321,7 +334,7 @@ export default {
                 })
                 this.taskTitle = ""
                 this.taskDesc = ""
-                this.fetchTasksInUserStory()
+                // this.fetchTasksInUserStory()
             } catch {
 
             }

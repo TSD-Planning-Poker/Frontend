@@ -1,5 +1,5 @@
 
-import { fetchCurrentTasks, AddTask } from '../services'
+import { fetchCurrentTasks, AddTask, deleteTaskInTaskService } from '../services'
 
 const tasks_state = {
     state: () => ({
@@ -20,7 +20,13 @@ const tasks_state = {
 
         async AddTask(context, data) {
             var response = await AddTask(data)
-        }
+        },
+
+        async deleteTask(context, id){
+            var response = await deleteTaskInTaskService(id)
+            console.log(response)
+          },
+
     }
 }
 
