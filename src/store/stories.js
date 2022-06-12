@@ -4,11 +4,13 @@ import { startSessionService, finiliseUserStoryService, exportUserStoriesService
 const stories_state = {
   state: () => ({
       exportUrl: '',
+      tasksInStory: [],
   }),
   mutations: {
     setExportFile(state, payload) {
       state.exportUrl = payload
     },
+
   },
   actions: {
 

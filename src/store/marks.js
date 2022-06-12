@@ -8,6 +8,7 @@ const marks_state = {
     mutations: { 
         setCurrentMarks(state, payload){
             state.current_marks = payload
+            console.log(state.current_marks)
         },
         
      },
