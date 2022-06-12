@@ -1,5 +1,5 @@
 
-import { startSessionService, finiliseUserStoryService, exportUserStoriesService, exportUserStoriesFromSingleRoom, importUserStoriesFromSingleRoom} from '../services'
+import { startSessionService, finiliseUserStoryService, exportUserStoriesService, exportUserStoriesFromSingleRoom, importUserStoriesFromSingleRoom,deleteStoryInRoomService} from '../services'
 
 const stories_state = {
   state: () => ({
@@ -30,7 +30,11 @@ const stories_state = {
     async importUserStoriesSingleRoom(context, data){
      localStorage.setItem("multipart", true)
     var response = await importUserStoriesFromSingleRoom(data);
-    }
+    },
+    async deleteStory(context, id){
+      var response = await deleteStoryInRoomService(id)
+      console.log(response)
+    },
   }
 }
 

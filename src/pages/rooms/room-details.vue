@@ -37,10 +37,7 @@
                             {{ story.completed ? "Completed" : story.evaluated ? "Evaluated" : "Pendding" }}
                         </div>
                         <div class="di flex-grow"></div>
-                        <a class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
-                        <a @click="exportUserStories"
-                            class=" text-blue-700 mx-2 hover:cursor-pointer text-xs ">Export</a>
-                        <a class=" text-blue-700 mx-2 hover:cursor-pointer text-xs ">Details</a>
+                        <a @click="openDelete(story.id)" class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
                     </div>
                 </div>
             </div>
@@ -139,6 +136,7 @@
             </div>
         </div>
         <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
+        <DeleteUserStory :open="getopendelete" @cancelModal="openDelete" @storyDeleted="fetchDeleteStory" :storyId="storyId" />
         <ImportFileModal :open="getopenimport" @cancelModal="openModalImport" @fileImported="fetch" :roomId="id" />
         <ExportFileModal :open="getopenexport" @cancelModal="openModalExport" :roomId="id" />
         <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :room_id="id" />
@@ -152,6 +150,7 @@
 
 <script>
 import AddUSerStoryModal from './add_user_story.vue'
+import DeleteUserStory from './delete_user_story.vue'
 import ImportFileModal from './import_file.vue'
 import ExportFileModal from './export_file.vue'
 import EvaluateStory from './evaluate_story.vue'
@@ -166,6 +165,7 @@ export default {
 
     components: {
         AddUSerStoryModal,
+        DeleteUserStory,
         ImportFileModal,
         ExportFileModal,
         EvaluateStory,
@@ -186,6 +186,8 @@ export default {
             taskDesc: "",
             open_import: false,
             open_export: false,
+            open_delete: false,
+            storyId: -1,
         }
     },
 
@@ -225,6 +227,9 @@ export default {
         getSelectedMarkId() {
             return this.seleted_mark_id;
         },
+        getopendelete(){
+            return this.open_delete;
+        },
         getopen() {
             return this.open;
         },
@@ -248,6 +253,11 @@ export default {
         async fetch() {
             await this.$store.dispatch('fetchStoriesInRoom', this.id)
         },
+        async fetchDeleteStory(){
+            this.selected_story = undefined
+            this.open_delete = false;
+            this.fetch();
+        },
         async fetchMembers() {
             await this.$store.dispatch('fetchMembersInRoom', this.id)
         },
@@ -264,6 +274,10 @@ export default {
         openEvalModal(id) {
             this.seleted_mark_id = id
             this.open_eval = !this.open_eval
+        },
+        openDelete(id){
+            this.storyId = id
+            this.open_delete = !this.open_delete;
         },
         openModal() {
             this.open = !this.open

@@ -1,5 +1,5 @@
 
-import { fetchRoomsService, fetchStoriesInRoomsService, addStoryInRoomService, fetchMembersInRoomService } from '../services'
+import { fetchRoomsService, fetchStoriesInRoomsService, addStoryInRoomService, fetchMembersInRoomService, deleteStoryInRoomService } from '../services'
 
 const rooms_state = {
     state: () => ({ 
@@ -33,6 +33,8 @@ const rooms_state = {
         var response = await addStoryInRoomService(story)
         console.log(response)
       },
+
+     
 
       async fetchMembersInRoom(contex, room_id){
         var response = await fetchMembersInRoomService(room_id)
