@@ -29,6 +29,25 @@ export async function finiliseUserStoryService(data) {
         return error.response
     }
 }
+export async function deleteStoryInRoomService(data){
+    try {
+        var response = await api.delete(`/api/stories/${data.id}/`)
+        notify({
+            type: 'success',
+            title: `user story deleted`,
+            text: ``,
+        });
+        return response
+    } catch (error) {
+        console.log(error)
+        notify({
+            type: 'error',
+            title: `error`,
+            text: ``,
+        });
+        return error.response
+    }
+}
 
 export async function exportUserStoriesService(data) {
     try {
