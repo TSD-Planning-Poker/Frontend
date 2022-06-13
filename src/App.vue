@@ -4,10 +4,11 @@
 </script>
 
 <template>
-<notifications />
+  <div>
+    <notifications />
 
-<router-view ></router-view>
-
+    <router-view></router-view>
+  </div>
 </template>
 
 <style>
