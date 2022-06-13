@@ -4,16 +4,13 @@
         <div class="user-stories w-1/3 bg-slate-200 ">
 
             <div class="story flex my-5">
-                <!-- exportUserStories -->
                 <button @click="openModalExport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
                     Export </button>
                   <button @click="openModalImport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
                     Import </button>
                 <button v-on:click="openModal" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Add
                     story </button>
-                <!-- <button class=" bg-blue-500 px-3 h-7 mx-3 text-white font-bold">  </button> -->
             </div>
-            <!-- <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a> -->
 
 
             <!-- User Story card -->
@@ -59,28 +56,11 @@
                 </div>
 
             </div>
-
-
-            <!-- {{currentMarks}} Somthing -->
-
-            <!-- <div class="nostoryselected bg-white flex justify-center w-full h-full">
-                   <div
-                    class="m-auto flex-shrink-0 flex flex-col items-center justify-center w-full h-36 "
-                  >
-                    <ExclamationIcon
-                      class="h-20 w-20 text-red-300"
-                      aria-hidden="true"
-                    />
-                    
-                  <div class="txt">User story not selected</div>
-                  </div>
-              </div> -->
-              {{currentMarks}}
+        
             <div class="evaluation ml-5 mb-40">
                 <div v-on:click="openEvalModal(mark.id)" v-for="mark in currentMarks" :key="mark"
                     class=" w-36 rounded-xl bg-white mx-3 my-5 flex flex-col p-3 shadow-xl">
                     <div v-if="mark.mark == undefined" class="mark font-bold text-6xl">#</div>
-                    <!-- <div v-else class="mark font-bold text-6xl">{{mark.mark}}</div> -->
                     <div v-else class="mark font-bold text-6xl">{{ mark.mark == 0 ? '#' : mark.mark }}</div>
                     <div class="mark font-bold text-sm text-left">Dev: {{ mark.evaluator__username }}</div>
                     <div class="mark text-xs text-left font-bold "
@@ -250,9 +230,7 @@ export default {
         getopenexport(){
             return this.open_export;
         },
-        // exportUrl() {
-        //     return this.$store.state.stories.exportUrl
-        // }
+
 
     },
     mounted() {
@@ -275,9 +253,6 @@ export default {
         async fetchTasksInUserStory() {
             this.open_delete_task = false;
             await this.$store.dispatch('fetchCurrentTasks', this.selected_story)
-        },
-        async importUserStories(){
-            await this.$store.dispatch('importUserStoriesSingleRoom', { delimiter: '!', id: this.id })
         },
         openEvalModal(id) {
             this.seleted_mark_id = id
@@ -334,7 +309,7 @@ export default {
                 })
                 this.taskTitle = ""
                 this.taskDesc = ""
-                // this.fetchTasksInUserStory()
+                this.fetchTasksInUserStory()
             } catch {
 
             }

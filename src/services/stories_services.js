@@ -29,7 +29,7 @@ export async function finiliseUserStoryService(data) {
         return error.response
     }
 }
-export async function deleteStoryInRoomService(data){
+export async function deleteStoryInRoomService(data) {
     try {
         var response = await api.delete(`/api/stories/${data.id}/`)
         notify({
@@ -98,7 +98,7 @@ export async function importUserStoriesFromSingleRoom(data) {
         formData.append('file', data.file);
         console.log(formData)
         console.log(formData.get("file"))
-        var response = await api.post(`/api/import/${data.delimiter}/${data.id}/`, {"file": formData.get("file")})
+        var response = await api.post(`/api/import/${data.delimiter}/${data.id}/`, { "file": formData.get("file") })
         notify({
             type: 'success',
             title: `success`,

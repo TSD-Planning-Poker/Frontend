@@ -10,9 +10,24 @@ export async function fetchCurrentTasks(id){
 
 
 export async function AddTask(data){
-    var response = await api.post(`/api/tasks/`, data)
-    return response
+    try{
 
+        var response = await api.post(`/api/tasks/`, data)
+        notify({
+            type: 'success',
+            title: `task added`,
+            text: ``,
+        });
+        return response
+    } catch (error) {
+    console.log(error)
+    notify({
+        type: 'error',
+        title: `error`,
+        text: ``,
+    });
+    return error.response
+}
     
 }
 
