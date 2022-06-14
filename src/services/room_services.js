@@ -17,6 +17,11 @@ export async function addStoryInRoomService(story){
     return response
 }
 
+export async function addRoomService(data){
+    var response = await api.post(`api/rooms/`, data)
+    return response
+}
+
 export async function fetchMembersInRoomService(id){
     var response = await api.get(`/api/rooms/${id}/allusers/`,)
     return response

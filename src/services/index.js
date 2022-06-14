@@ -3,6 +3,7 @@ import {
   fetchStoriesInRoomsService,
   addStoryInRoomService,
   fetchMembersInRoomService,
+  addRoomService
 } from "./room_services";
 import { startSessionService, finiliseUserStoryService, exportUserStoriesService, exportUserStoriesFromSingleRoom, importUserStoriesFromSingleRoom, deleteStoryInRoomService } from "./stories_services";
 import { allUsersService } from "./auth_services";
@@ -16,6 +17,7 @@ export {
   addStoryInRoomService,
   startSessionService,
   fetchCurrentMarks,
+  addRoomService,
   fetchMembersInRoomService,
   allUsersService,
   finiliseUserStoryService,
