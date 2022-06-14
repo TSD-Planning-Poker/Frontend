@@ -35,7 +35,7 @@
             leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
             <DialogPanel
-              class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-72"
+              class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
             >
               <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div class="sm:flex sm:items-start">
@@ -45,10 +45,11 @@
                       as="h3"
                       class="text-lg leading-6 font-medium text-gray-900"
                     >
-                      Finalise Story With Mark
+                      Add Room
                     </DialogTitle>
                     <div class="mt-2 flex flex-col ">
-                      <input type="number" max="10" min="0" v-model="mark" class=" w-40 border-2 rounded-sm px-2 py-1 mt-2" placeholder="Story title" />
+                      <input type="text" v-model="roomName" class=" w-96 border-2 rounded-sm px-2 py-1 mt-2" placeholder="Room name" />
+                      <input type="text" v-model="roomDesc" class=" w-96 border-2 rounded-sm px-2 py-1 mt-2" placeholder="Room Description" />
                     </div>
                   </div>
                 </div>
@@ -59,9 +60,9 @@
                 <button
                   type="button"
                   class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                  @click="finiliseUserStory()"
+                  @click="addRoom()"
                 >
-                  Finalise Story
+                  Add Room
                 </button>
                 <button
                   type="button"
@@ -69,7 +70,7 @@
                   @click="$emit('cancelModal')"
                   ref="cancelButtonRef"
                 >
-                  Close
+                  Cancel
                 </button>
               </div>
             </DialogPanel>
@@ -97,10 +98,11 @@ export default {
     TransitionChild,
     TransitionRoot,
   },
-  props: ["open", "story_id"],
+  props: ["open"],
   data() {
     return {
-      mark: 0,
+      roomName: "",
+      roomDesc: "",
     };
   },
 
@@ -108,9 +110,18 @@ export default {
       sendTrigger(){
           this.$emit('onCancel')
       },
-      async finiliseUserStory(){
-            await this.$store.dispatch('finiliseUserStory', { id: this.story_id, final_mark: this.mark } )
-            this.$emit('evaluated')
+      async addRoom(){
+        try {
+            await this.$store.dispatch('addRoom', {
+                    name: this.roomName,
+                    description: this.roomDesc,
+                })
+            this.roomName = ""
+            this.roomDesc = ""
+            this.$emit('roomAdded')
+        } catch {
+
+        }
       }
   }
 };

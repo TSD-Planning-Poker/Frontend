@@ -13,11 +13,11 @@
           id="roomname" placeholder="room name">
       </div>
 
+      <button @click="openModalAddRoom" class="mt-6 mr-5 bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+        Add New Room </button>
+
       <button @click="openModal" class="mt-6 mr-5 bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
         Export </button>
-
-
-      <!-- <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a> -->
 
     </div>
 
@@ -60,13 +60,16 @@
       </div>
 
     </div>
-    <ExportFileModal :open="getopen" @cancelModal="openmodal" roomId="-1"/>
+    <ExportFileModal :open="getopen" @cancelModal="openmodal" roomId="-1" />
+    <AddRoom :open="getopenadd" @cancelModal="openModalAddRoom" @roomAdded="updateState" />
+
   </div>
 
 </template>
 
 <script>
 import ExportFileModal from './export_file.vue'
+import AddRoom from './add_room.vue'
 
 export default {
 
@@ -76,7 +79,7 @@ export default {
   },
   components: {
     ExportFileModal,
-
+    AddRoom
   },
   computed: {
     rooms() {
@@ -88,15 +91,20 @@ export default {
     exportUrl() {
       return this.$store.state.stories.exportUrl
     },
-     getopen() {
-            return this.open;
-        },
+    getopen() {
+      return this.open;
+    },
+    getopenadd() {
+      return this.open_add;
+    }
+
   },
 
   data() {
     return {
       search: "",
-            open: false,
+      open: false,
+      open_add: false,
     }
   },
 
@@ -110,16 +118,17 @@ export default {
       this.$store.dispatch('fetchRooms', this.search)
     },
     openModal() {
-            this.open = !this.open
-        },
-
+      this.open = !this.open
+    },
+    openModalAddRoom() {
+      this.open_add = !this.open_add
+    },
     navigateRoom(room) {
       console.log(room)
       this.$router.push({ name: 'rooms-details', params: { id: room.id } })
     },
-    acceptInvitation(invitation) {
-      this.$store.dispatch('acceptInvitiation', { invitation_code: invitation.code })
-      this.updateState()
+    async acceptInvitation(invitation) {
+      await this.$store.dispatch('acceptInvitiation', { invitation_code: invitation.code })
       this.updateState()
     },
     async exportUserStories() {
