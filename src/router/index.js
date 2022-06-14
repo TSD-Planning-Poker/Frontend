@@ -56,7 +56,8 @@ const routes = [
   });
   
   router.beforeEach((to, from, next) => {
-    if (to.name !== 'authorization' && store.state.users.userToken == "") next({ name: 'authorization' })
+    console.log(store.state.users.userToken)
+    if (to.name !== 'authorization' && store.state.users.userToken == '') next({ name: 'authorization' })
     else next()
   });
   

@@ -69,7 +69,7 @@
                   @click="$emit('cancelModal')"
                   ref="cancelButtonRef"
                 >
-                  Cancel
+                  Close
                 </button>
               </div>
             </DialogPanel>

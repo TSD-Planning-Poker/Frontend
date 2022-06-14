@@ -5,6 +5,7 @@ const users_state = {
   state: () => ({
     all_users: [],
     all_invitations: [],
+    userToken: '',
   }),
   mutations: {
     setAllUsers(state, payload) {
@@ -14,6 +15,7 @@ const users_state = {
       state.all_invitations = payload
     },
     setUserToken(state, payload) {
+      state.userToken = payload.token
       localStorage.setItem("userToken", payload.token)
       localStorage.setItem("userName", payload.username)
     }

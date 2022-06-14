@@ -7,14 +7,13 @@
                 <!-- exportUserStories -->
                 <button @click="openModalExport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
                     Export </button>
-                  <button @click="openModalImport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
+                <button @click="openModalImport" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold">
                     Import </button>
                 <button v-on:click="openModal" class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Add
                     story </button>
                 <!-- <button class=" bg-blue-500 px-3 h-7 mx-3 text-white font-bold">  </button> -->
             </div>
             <!-- <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`" style="visibility: hidden"></a> -->
-
 
             <!-- User Story card -->
             <div class=" h-5/6 overflow-auto hidescroll ">
@@ -37,7 +36,8 @@
                             {{ story.completed ? "Completed" : story.evaluated ? "Evaluated" : "Pendding" }}
                         </div>
                         <div class="di flex-grow"></div>
-                        <a @click="openDelete(story.id)" class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
+                        <a @click="openDelete(story.id)"
+                            class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     <button v-on:click="openFinailiseModal()"
                         class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Finalise </button>
                     <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Show Marks </button>
-                    <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Refresh </button>
+                    <!-- <button class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Refresh </button> -->
                     <button v-on:click="openInviteUserModal()"
                         class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Invite </button>
                 </div>
@@ -61,26 +61,11 @@
             </div>
 
 
-            <!-- {{currentMarks}} Somthing -->
-
-            <!-- <div class="nostoryselected bg-white flex justify-center w-full h-full">
-                   <div
-                    class="m-auto flex-shrink-0 flex flex-col items-center justify-center w-full h-36 "
-                  >
-                    <ExclamationIcon
-                      class="h-20 w-20 text-red-300"
-                      aria-hidden="true"
-                    />
-                    
-                  <div class="txt">User story not selected</div>
-                  </div>
-              </div> -->
-              {{currentMarks}}
             <div class="evaluation ml-5 mb-40">
-                <div v-on:click="openEvalModal(mark.id)" v-for="mark in currentMarks" :key="mark"
-                    class=" w-36 rounded-xl bg-white mx-3 my-5 flex flex-col p-3 shadow-xl">
+                <div v-for="mark in currentMarks" :key="mark"
+                    class="  mx-3 my-5 flex flex-col p-3">
+                    <div v-on:click="openEvalModal(mark.id)"  class="w-36 rounded-xl bg-white p-3 shadow-xl">
                     <div v-if="mark.mark == undefined" class="mark font-bold text-6xl">#</div>
-                    <!-- <div v-else class="mark font-bold text-6xl">{{mark.mark}}</div> -->
                     <div v-else class="mark font-bold text-6xl">{{ mark.mark == 0 ? '#' : mark.mark }}</div>
                     <div class="mark font-bold text-sm text-left">Dev: {{ mark.evaluator__username }}</div>
                     <div class="mark text-xs text-left font-bold "
@@ -88,6 +73,10 @@
                         {{ mark.mark == 0 ? 'Waiting evaluation...' : mark.mark == undefined ? 'Locked' : 'Evaluated!'
                         }}
                     </div>
+                    </div>
+                    <div v-if="mark.evaluator__username == userName">
+                       <button @click="openModalVotingHistory" class="mt-3 bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Voting Story </button>
+                </div>
                 </div>
 
             </div>
@@ -130,7 +119,8 @@
                                 - {{ task.description }}
                             </span>
 
-                                   <a @click="openDeleteTask(task.id)" class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
+                            <a @click="openDeleteTask(task.id)"
+                                class=" text-red-700 mx-2 hover:cursor-pointer text-xs ">Delete</a>
                         </h3>
 
 
@@ -139,8 +129,10 @@
             </div>
         </div>
         <AddUSerStoryModal :open="getopen" @cancelModal="openModal" @storyAdded="fetch" :roomId="id" />
-        <DeleteUserStory :open="getopendelete" @cancelModal="openDelete" @storyDeleted="fetchDeleteStory" :storyId="storyId" />
-        <DeleteTask :open="getopendeletetask" @cancelModal="openDeleteTask" @taskDeleted="fetchTasksInUserStory" :taskId="taskId" />
+        <DeleteUserStory :open="getopendelete" @cancelModal="openDelete" @storyDeleted="fetchDeleteStory"
+            :storyId="storyId" />
+        <DeleteTask :open="getopendeletetask" @cancelModal="openDeleteTask" @taskDeleted="fetchTasksInUserStory"
+            :taskId="taskId" />
         <ImportFileModal :open="getopenimport" @cancelModal="openModalImport" @fileImported="fetch" :roomId="id" />
         <ExportFileModal :open="getopenexport" @cancelModal="openModalExport" :roomId="id" />
         <InviteUser :open="getInviteUser" @cancelModal="openInviteUserModal" @storyAdded="fetch" :room_id="id" />
@@ -148,6 +140,7 @@
             @cancelModal="openEvalModal" />
         <FinaliseStory :open="open_finalise_story" :story_id="getSelectedStoryId"
             @evaluated="fetchMarks(this.selected_story)" @cancelModal="openFinailiseModal" />
+        <VotingHistory :open="getopenvotinghistory" @cancelModal="openModalVotingHistory" />
     </div>
 
 </template>
@@ -155,6 +148,7 @@
 <script>
 import AddUSerStoryModal from './add_user_story.vue'
 import DeleteUserStory from './delete_user_story.vue'
+import VotingHistory from './voting_story.vue'
 import DeleteTask from './delete_task.vue'
 import ImportFileModal from './import_file.vue'
 import ExportFileModal from './export_file.vue'
@@ -179,6 +173,7 @@ export default {
         InviteUser,
         RoomAlert,
         ExclamationIcon,
+        VotingHistory,
     },
     data() {
         return {
@@ -194,7 +189,9 @@ export default {
             open_export: false,
             open_delete: false,
             open_delete_task: false,
+            open_voting_history: false, 
             storyId: -1,
+            userName: localStorage.getItem('userName'),
             taskId: -1,
         }
     },
@@ -208,6 +205,9 @@ export default {
         },
         currentTasks() {
             return this.$store.state.tasks.current_tasks
+        },
+        currentVotingStory() {
+            return this.$store.state.marks.current_voting_story
         },
         getSelectedStoryStatus() {
             var stories = this.$store.state.rooms.storiesInRoom
@@ -232,39 +232,39 @@ export default {
         getopeeval() {
             return this.open_eval
         },
+        getopenvotinghistory(){
+            return this.open_voting_history
+        },
         getSelectedMarkId() {
             return this.seleted_mark_id;
         },
-        getopendelete(){
+        getopendelete() {
             return this.open_delete;
         },
-         getopendeletetask(){
+        getopendeletetask() {
             return this.open_delete_task;
         },
         getopen() {
             return this.open;
         },
-        getopenimport(){
+        getopenimport() {
             return this.open_import;
         },
-        getopenexport(){
+        getopenexport() {
             return this.open_export;
         },
-        // exportUrl() {
-        //     return this.$store.state.stories.exportUrl
-        // }
-
     },
     mounted() {
         this.fetch();
         this.fetchMembers();
+        // this.fetchVotingHistory();
     },
 
     methods: {
         async fetch() {
             await this.$store.dispatch('fetchStoriesInRoom', this.id)
         },
-        async fetchDeleteStory(){
+        async fetchDeleteStory() {
             this.selected_story = undefined
             this.open_delete = false;
             this.fetch();
@@ -276,28 +276,36 @@ export default {
             this.open_delete_task = false;
             await this.$store.dispatch('fetchCurrentTasks', this.selected_story)
         },
-        async importUserStories(){
+        async fetchVotingHistory(id) {
+            await this.$store.dispatch('fetchVotingStory', id)
+            console.log(this.currentVotingStory)
+        },
+
+        async importUserStories() {
             await this.$store.dispatch('importUserStoriesSingleRoom', { delimiter: '!', id: this.id })
         },
         openEvalModal(id) {
             this.seleted_mark_id = id
             this.open_eval = !this.open_eval
         },
-        openDelete(id){
+        openDelete(id) {
             this.storyId = id
             this.open_delete = !this.open_delete;
         },
-        openDeleteTask(id){
+        openModalVotingHistory(){
+            this.open_voting_history = !this.open_voting_history
+        },
+        openDeleteTask(id) {
             this.taskId = id
             this.open_delete_task = !this.open_delete_task;
         },
         openModal() {
             this.open = !this.open
         },
-        openModalImport(){
+        openModalImport() {
             this.open_import = !this.open_import
         },
-        openModalExport(){
+        openModalExport() {
             this.open_export = !this.open_export
         },
         openNewTaskModal() {
@@ -312,7 +320,8 @@ export default {
         async fetchMarks(id) {
             this.selected_story = id
             await this.$store.dispatch('fetchCurrentMarks', id)
-            this.fetchTasksInUserStory()
+            await this.fetchTasksInUserStory()
+            await this.fetchVotingHistory(id)
             await this.fetch()
         },
 
@@ -320,7 +329,7 @@ export default {
             this.selected_story = id
             await this.fetchMarks(id)
             await this.$store.dispatch('startSession', id)
-            await this.fetch()
+            await this.fetchMarks(id)
 
         },
 
@@ -334,7 +343,7 @@ export default {
                 })
                 this.taskTitle = ""
                 this.taskDesc = ""
-                // this.fetchTasksInUserStory()
+                this.fetchTasksInUserStory()
             } catch {
 
             }
