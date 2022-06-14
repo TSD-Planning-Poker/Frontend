@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/',
+    baseURL: 'https://pp-backend.ptl.cloud/',
     timeout: 6000,
   });
 
