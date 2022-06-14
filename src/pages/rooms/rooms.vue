@@ -61,8 +61,8 @@
 
     </div>
     <ExportFileModal :open="getopen" @cancelModal="openmodal" roomId="-1" />
-    <AddRoom :open="getopenadd" @cancelModal="openModalAddRoom" @roomAdded="updateState"/>
-    
+    <AddRoom :open="getopenadd" @cancelModal="openModalAddRoom" @roomAdded="updateState" />
+
   </div>
 
 </template>
@@ -94,7 +94,7 @@ export default {
     getopen() {
       return this.open;
     },
-    getopenadd(){
+    getopenadd() {
       return this.open_add;
     }
 
@@ -127,8 +127,8 @@ export default {
       console.log(room)
       this.$router.push({ name: 'rooms-details', params: { id: room.id } })
     },
-    acceptInvitation(invitation) {
-      this.$store.dispatch('acceptInvitiation', { invitation_code: invitation.code })
+    async acceptInvitation(invitation) {
+      await this.$store.dispatch('acceptInvitiation', { invitation_code: invitation.code })
       this.updateState()
     },
     async exportUserStories() {

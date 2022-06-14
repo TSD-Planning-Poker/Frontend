@@ -7,6 +7,11 @@ export async function fetchCurrentMarks(id){
     return response
 }
 
+export async function fetchVotingStoryService(id){
+    var response = await api.get(`/api/voting_history/${id}/`)
+    return response
+}
+
 export async function UpdateMarkService(data){ 
     try {
         var mark = { "mark": data.mark }
