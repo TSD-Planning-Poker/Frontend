@@ -48,7 +48,7 @@
 
             <div class="flex flex-col">
                 <room-alert v-if="selected_story != undefined && getSelectedStoryStatus != 'pendding'"
-                    :status="getSelectedStoryStatus" />
+                    :status="getSelectedStoryStatus" :mark="getSelectMark" />
                 <div class="story  flex flex-row-reverse my-5">
                     <button v-on:click="openFinailiseModal()"
                         class=" bg-blue-500 px-3 h-7 mx-3 text-sm text-white font-bold"> Finalise </button>
@@ -208,6 +208,11 @@ export default {
         },
         currentVotingStory() {
             return this.$store.state.marks.current_voting_story
+        },
+        getSelectMark(){
+            var stories = this.$store.state.rooms.storiesInRoom
+            var selected = stories.find(story => story.id == this.selected_story)
+            return selected.final_mark
         },
         getSelectedStoryStatus() {
             var stories = this.$store.state.rooms.storiesInRoom
