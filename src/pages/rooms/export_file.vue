@@ -27,7 +27,7 @@
                     <div class="mt-2 flex flex-col ">
                       <input type="text" v-model="delimiter" class=" w-96 border-2 rounded-sm px-2 py-1 mt-2"
                         placeholder="delimiter" />
-                      <a id="exportLink" :href="`http://localhost:8000/static/${exportUrl}`"
+                      <a id="exportLink" :href="`https://pp-backend.ptl.cloud/static/${exportUrl}`"
                         style="visibility: hidden"></a>
                     </div>
                   </div>
