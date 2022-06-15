@@ -1,7 +1,21 @@
-# Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+# Planning Poker - Frontend
 
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+
+## Used technologies
+- Vue.js
+- Vuex
+- Vite
+- Vue Router
+
+## Contributing
+To run issue commands
+1. `npm install`
+2. `npm run dev`
+
+One also should have backend deployed or use external one
+
+## Production deployment
+Best option for fast deploy is to use docker image. One is providede within this repository, also compatible with swarm or clustered deployments.
