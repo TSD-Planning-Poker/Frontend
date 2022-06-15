@@ -19,3 +19,7 @@ One also should have backend deployed or use external one
 
 ## Production deployment
 Best option for fast deploy is to use docker image. One is providede within this repository, also compatible with swarm or clustered deployments.
+
+## Developers
+- Katarzyna Kulesa
+- Tesfamichael Ali Molla
