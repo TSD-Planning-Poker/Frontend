@@ -23,3 +23,5 @@ Best option for fast deploy is to use docker image. One is providede within this
 ## Developers
 - Katarzyna Kulesa
 - Tesfamichael Ali Molla
+- Piotr Tylczyński
+- Wojciech Lewandowski
